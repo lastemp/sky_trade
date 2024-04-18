@@ -6,7 +6,7 @@ pub mod state;
 
 use {anchor_lang::prelude::*, instructions::*};
 
-declare_id!("BLjFLo1jqt5dyx9Jnreto7aKpzP1Y1UUh8X3UfQZdtuQ");
+declare_id!("FvLyA2w9BMTFDVSeNgHnVtZgRsDQ8srYf81JxSS95xrm");
 
 #[program]
 pub mod sky_trade {

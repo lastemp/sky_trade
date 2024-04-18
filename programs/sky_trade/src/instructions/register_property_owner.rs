@@ -1,10 +1,7 @@
 //! RegisterPropertyOwner instruction handler
 
 use {
-    crate::{
-        error::SkyTradeError,
-        state::property_owner::{OwnerCategory, PropertyOwner},
-    },
+    crate::{error::SkyTradeError, state::property_owner::PropertyOwner},
     anchor_lang::prelude::*,
     //anchor_spl::token::{Token, TokenAccount},
     //solana_program::program_error::ProgramError,
@@ -31,9 +28,10 @@ pub struct RegisterPropertyOwner<'info> {
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
 pub struct RegisterPropertyOwnerParams {
-    name: String,            // name of property owner
-    category: OwnerCategory, // category of property owner
-    country: String,         // country of property owner
+    name: String, // name of property owner
+    //category: OwnerCategory, // category of property owner
+    category: u8,    // category of property owner
+    country: String, // country of property owner
 }
 
 // name length
@@ -53,10 +51,14 @@ pub fn register_property_owner(
         return Err(SkyTradeError::InvalidNameLength.into());
     }
 
+    /* 1: IndividualPropertyOwner,
+    2: RealEstateCompany,
+    3: CityMunicipality, */
+
     let is_valid_category = {
         match params.category {
-            OwnerCategory::None => false,
-            _ => true,
+            1 | 2 | 3 => true,
+            _ => false,
         }
     };
 

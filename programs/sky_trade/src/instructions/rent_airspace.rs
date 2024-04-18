@@ -5,7 +5,7 @@ use {
         error::SkyTradeError,
         state::{
             airspace::Airspace, configs::Configs, deposit_base::DepositBase,
-            drone_operator::DroneOperator, property_owner::PropertyOwner,
+            drone_operator::DroneOperator, property::Property, property_owner::PropertyOwner,
         },
     },
     anchor_lang::{prelude::*, system_program},
@@ -16,14 +16,16 @@ use {
 pub struct RentAirspace<'info> {
     #[account(mut, has_one = owner, constraint = drone_operator.active @ SkyTradeError::InvalidDroneOperatorStatus)]
     pub drone_operator: Account<'info, DroneOperator>,
-    // mut makes it changeble (mutable)
+    /* // mut makes it changeble (mutable)
     /// CHECK: airspace account is initialized
     #[account(
         mut, constraint = airspace.is_initialized @ SkyTradeError::AccountNotInitialized
     )]
-    pub airspace: Account<'info, Airspace>,
+    pub airspace: Account<'info, Airspace>,*/
     #[account(mut, constraint = property_owner.active @ SkyTradeError::InvalidPropertyOwnerStatus)]
     pub property_owner: Account<'info, PropertyOwner>,
+    #[account(mut, constraint = property.owner == property_owner.owner @ SkyTradeError::PersonDoesNotOwnAirspace)]
+    pub property: Account<'info, Property>, // Enforce the check that property(airspace) must be owned by seller
     #[account(mut)]
     pub configs: Account<'info, Configs>,
     //admin accs
@@ -58,18 +60,30 @@ pub fn rent_airspace(ctx: Context<RentAirspace>, params: &RentAirspaceParams) ->
     let deposit_auth = &ctx.accounts.owner;
     let sys_program = &ctx.accounts.system_program;
 
-    let airspace = &mut ctx.accounts.airspace;
+    //let airspace = &mut ctx.accounts.airspace;
     let drone_operator = &mut ctx.accounts.drone_operator;
     let configs = &mut ctx.accounts.configs;
     let property_owner = &mut ctx.accounts.property_owner;
+    let property = &ctx.accounts.property;
 
     // Lets check if the property owner has claimed airspace
-    let mut is_property_owner_claimed_airspace = false;
-    for property in airspace.properties.iter() {
+    //let mut is_property_owner_claimed_airspace = false;
+    /* for property in airspace.properties.iter() {
         if property.owner == property_owner.owner {
             is_property_owner_claimed_airspace = true;
             break;
         }
+    }
+
+    if !is_property_owner_claimed_airspace {
+        return Err(SkyTradeError::PropertyOwnerNotClaimedAirspace.into());
+    }
+    */
+
+    // Lets check if the property owner has claimed airspace
+    let mut is_property_owner_claimed_airspace = false;
+    if property.owner == property_owner.owner {
+        is_property_owner_claimed_airspace = true;
     }
 
     if !is_property_owner_claimed_airspace {

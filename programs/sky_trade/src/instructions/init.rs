@@ -75,6 +75,7 @@ pub fn init(ctx: Context<Init>, params: &InitParams) -> Result<()> {
 
     // configs
     configs.price_per_cubic_foot = params.price_per_cubic_foot;
+    configs.buying_price_per_cubic_foot = params.buying_price_per_cubic_foot;
     configs.is_initialized = true;
 
     //airspace

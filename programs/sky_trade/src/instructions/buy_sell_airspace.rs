@@ -77,13 +77,23 @@ pub fn buy_sell_airspace(
         return Err(SkyTradeError::InvalidCubicFeet.into());
     }
 
-    // Lets check if the seller owns airspace
+    /* // Lets check if the seller owns airspace
     let mut is_person_owns_airspace = false;
     for property in airspace.properties.iter() {
         if property.owner == seller.owner {
             is_person_owns_airspace = true;
             break;
         }
+    }
+
+    if !is_person_owns_airspace {
+        return Err(SkyTradeError::PersonDoesNotOwnAirspace.into());
+    } */
+
+    // Lets check if the seller owns airspace
+    let mut is_person_owns_airspace = false;
+    if property.owner == seller.owner {
+        is_person_owns_airspace = true;
     }
 
     if !is_person_owns_airspace {

@@ -4,8 +4,9 @@ use {
     crate::{
         error::SkyTradeError,
         state::{
+            airspace::Airspace,
             property::{GpsCoordinates, Property},
-            property_owner::{OwnerCategory, PropertyOwner},
+            property_owner::PropertyOwner,
         },
     },
     anchor_lang::prelude::*,
@@ -28,6 +29,12 @@ pub struct ClaimAirspace<'info> {
     pub property: Account<'info, Property>,
     #[account(mut, has_one = owner)]
     pub property_owner: Account<'info, PropertyOwner>,
+    // mut makes it changeble (mutable)
+    /// CHECK: airspace account is initialized
+    #[account(
+        mut, constraint = airspace.is_initialized @ SkyTradeError::AccountNotInitialized
+    )]
+    pub airspace: Account<'info, Airspace>,
     // mut makes it changeble (mutable)
     #[account(mut)]
     pub owner: Signer<'info>,
@@ -91,15 +98,23 @@ pub fn claim_airspace(ctx: Context<ClaimAirspace>, params: &ClaimAirspaceParams)
     }
 
     let property = &mut ctx.accounts.property;
+    let airspace = &mut ctx.accounts.airspace;
 
     // * - means dereferencing
     property.owner = *ctx.accounts.owner.key;
     property.name = params.name.to_string();
     property.country = params.country.to_string();
-    property.property_coordinates.latitude = latitude;
-    property.property_coordinates.longitude = longitude;
+    property.property_coordinates.latitude = latitude.to_string();
+    property.property_coordinates.longitude = longitude.to_string();
     property.cubic_feet = params.cubic_feet;
     property.is_claimed = true;
+
+    //airspace
+    let _coordinates = GpsCoordinates {
+        latitude,
+        longitude,
+    };
+    airspace.property_coordinates.push(_coordinates);
 
     Ok(())
 }

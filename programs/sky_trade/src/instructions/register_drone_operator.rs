@@ -1,10 +1,7 @@
 //! RegisterDroneOperator instruction handler
 
 use {
-    crate::{
-        error::SkyTradeError,
-        state::drone_operator::{DroneOperator, OperatorCategory},
-    },
+    crate::{error::SkyTradeError, state::drone_operator::DroneOperator},
     anchor_lang::prelude::*,
     //anchor_spl::token::{Token, TokenAccount},
     //solana_program::program_error::ProgramError,
@@ -31,9 +28,10 @@ pub struct RegisterDroneOperator<'info> {
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
 pub struct RegisterDroneOperatorParams {
-    name: String,               // name of drone operator
-    category: OperatorCategory, // category of drone operator
-    country: String,            // country of drone operator
+    name: String, // name of drone operator
+    //category: OperatorCategory, // category of drone operator
+    category: u8,    // category of drone operator
+    country: String, // country of drone operator
 }
 // name length
 const NAME_LENGTH: usize = 50;
@@ -52,10 +50,13 @@ pub fn register_drone_operator(
         return Err(SkyTradeError::InvalidNameLength.into());
     }
 
+    /* 1: Individual,
+    2: Company */
+
     let is_valid_category = {
         match params.category {
-            OperatorCategory::None => false,
-            _ => true,
+            1 | 2 => true,
+            _ => false,
         }
     };
 

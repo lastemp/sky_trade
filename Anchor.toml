@@ -3,7 +3,7 @@ seeds = false
 skip-lint = false
 
 [programs.localnet]
-sky_trade = "BLjFLo1jqt5dyx9Jnreto7aKpzP1Y1UUh8X3UfQZdtuQ"
+sky_trade = "FvLyA2w9BMTFDVSeNgHnVtZgRsDQ8srYf81JxSS95xrm"
 
 [registry]
 url = "https://api.apr.dev"
