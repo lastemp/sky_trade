@@ -20,7 +20,7 @@ Solana. Information about installing Rust can be found
 be found [here](https://docs.solana.com/cli/install-solana-cli-tools).
 
 Once you've completed the Solana installation run the following
-commands to configure you machine for local development:
+commands to configure your machine for local deployment:
 
 ```
 solana config set --url localhost
@@ -31,13 +31,13 @@ These two commands create Solana config files in `~/.config/solana/`
 which solana command line tools will read in to determine what cluster
 to connect to and what keypair to use.
 
-Having done that run a local Solana validator by running:
+Having done that run a local Solana validator by executing:
 
 ```
 solana-test-validator
 ```
 
-This program must be left running in the background.
+This program must be left running in a separate terminal window.
 
 ## Deploying the Solana program
 
