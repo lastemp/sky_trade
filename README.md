@@ -1,7 +1,7 @@
 # sky_trade
 
 This is a sky trade Rust Smart Contract(Solana Blockchain).
-It provides global air rights marketplace where participants buy, sell and rent airspace.
+It provides global air rights marketplace where participants buy, sell and rent airspace (https://sky.trade/).
 
 Below are some features contained in the program:
 
@@ -43,6 +43,10 @@ This program must be left running in a separate terminal window.
 
 To deploy the Solana program in this repository to the Solana cluster
 that you have configured run:
+
+```
+anchor build
+```
 
 ```
 anchor deploy
