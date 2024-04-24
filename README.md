@@ -1,7 +1,7 @@
 # sky_trade
 
 This is a [SkyTrade](https://sky.trade/) Rust Smart Contract(Solana Blockchain) built for educational purposes.
-It provides global air rights marketplace where participants buy, sell and rent airspace (https://sky.trade/).
+It provides global air rights marketplace where participants buy, sell and rent airspace.
 
 Below are some features contained in the program:
 
